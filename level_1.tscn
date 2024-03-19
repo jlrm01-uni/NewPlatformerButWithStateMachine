@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://2u43mmx5atef"]
+
+[ext_resource type="Texture2D" uid="uid://dccrf0f86dqo8" path="res://kenney_pixel-platformer (2)/Tilemap/tilemap_packed.png" id="1_rsxaw"]
+[ext_resource type="PackedScene" uid="uid://hht5fur6h4o5" path="res://player.tscn" id="2_n32rw"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="3_cxv6a"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yav8w"]
+texture = ExtResource("1_rsxaw")
+texture_region_size = Vector2i(18, 18)
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-9, -9, 9, -9, 9, 9, -9, 9)
+
+[sub_resource type="TileSet" id="TileSet_3lyrr"]
+tile_size = Vector2i(18, 18)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_yav8w")
+
+[node name="level1" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_3lyrr")
+format = 2
+layer_0/tile_data = PackedInt32Array(327682, 131072, 0, 327683, 131072, 0, 327684, 131072, 0, 327685, 131072, 0, 327686, 131072, 0, 327687, 131072, 0, 327688, 131072, 0, 327689, 131072, 0, 327690, 131072, 0, 327691, 131072, 0, 327692, 131072, 0, 327693, 131072, 0, 327694, 131072, 0, 327695, 131072, 0, 327696, 131072, 0, 720912, 131072, 0, 720913, 131072, 0, 720914, 131072, 0, 720915, 131072, 0, 720916, 131072, 0, 720917, 131072, 0, 720918, 131072, 0, 720919, 131072, 0, 720920, 131072, 0, 720921, 131072, 0, 720922, 131072, 0, 720923, 131072, 0, 720924, 131072, 0, 720925, 131072, 0, 720926, 131072, 0, 720927, 131072, 0, 720928, 131072, 0, 720929, 131072, 0, 524301, 131072, 0, 524302, 131072, 0, 524303, 131072, 0, 524304, 131072, 0, 524305, 131072, 0, 524306, 131072, 0, 524307, 131072, 0)
+
+[node name="Player" parent="." instance=ExtResource("2_n32rw")]
+position = Vector2(121, 46)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StateChartDebugger" parent="CanvasLayer/Control" instance=ExtResource("3_cxv6a")]
+layout_mode = 1
+offset_left = 739.0
+initial_node_to_watch = NodePath("../../../Player")
