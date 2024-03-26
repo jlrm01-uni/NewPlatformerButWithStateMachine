@@ -34,6 +34,18 @@ func _on_idle_state_physics_processing(delta):
 	if not is_on_floor():
 		state_chart.send_event("Air")
 
+	var direction = Input.get_axis("left", "right")
+	
+	if direction:
+		state_chart.send_event("Running")
+	else:
+		velocity.x = 0
+		
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+		state_chart.send_event("Air")
+		
+	move_and_slide()
 
 func _on_air_state_physics_processing(delta):
 	# Add the gravity.
@@ -42,4 +54,31 @@ func _on_air_state_physics_processing(delta):
 	else:
 		state_chart.send_event("Running")
 		
+	var direction = Input.get_axis("left", "right")
+	
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = 0
+		
 	move_and_slide()
+
+
+func _on_running_state_physics_processing(delta):
+	if not is_on_floor():
+		velocity.y += gravity * delta
+		
+	var direction = Input.get_axis("left", "right")
+	
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = 0
+		state_chart.send_event("Idle")
+		
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+		state_chart.send_event("Air")
+	
+	move_and_slide()
+	
