@@ -1,0 +1,89 @@
+[gd_scene load_steps=9 format=3 uid="uid://co5vtsehrfwfx"]
+
+[ext_resource type="Texture2D" uid="uid://bacx65ogpb1qa" path="res://kenney_pixel-platformer (2)/Tiles/Characters/tile_0008.png" id="1_1kbrq"]
+[ext_resource type="Script" path="res://enemy.gd" id="1_m7d6k"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_oq3ms"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_525dt"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_78833"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="6_oyaki"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bue26"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7yo3u"]
+size = Vector2(190, 76)
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_m7d6k")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_1kbrq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bue26")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="PlayerDetectionShape" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_7yo3u")
+debug_color = Color(0.847059, 0.321569, 0.501961, 0.419608)
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_oq3ms")
+
+[node name="CompoundState" type="Node" parent="StateChart"]
+script = ExtResource("3_525dt")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_78833")
+
+[node name="toChasing" type="Node" parent="StateChart/CompoundState/Idle"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../Chasing")
+event = &"Chasing"
+
+[node name="toFrozen" type="Node" parent="StateChart/CompoundState/Idle"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../Frozen")
+event = &"Frozen"
+
+[node name="Chasing" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_78833")
+
+[node name="toReturningHome" type="Node" parent="StateChart/CompoundState/Chasing"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../ReturningHome")
+event = &"ReturningHome"
+
+[node name="toFrozen" type="Node" parent="StateChart/CompoundState/Chasing"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../Frozen")
+event = &"Frozen"
+
+[node name="ReturningHome" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_78833")
+
+[node name="toIdle" type="Node" parent="StateChart/CompoundState/ReturningHome"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../Idle")
+event = &"Idle"
+
+[node name="toFrozen" type="Node" parent="StateChart/CompoundState/ReturningHome"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../Frozen")
+event = &"Frozen"
+
+[node name="toChasing" type="Node" parent="StateChart/CompoundState/ReturningHome"]
+script = ExtResource("6_oyaki")
+to = NodePath("../../Chasing")
+event = &"Chasing"
+
+[node name="Frozen" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_78833")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="state_physics_processing" from="StateChart/CompoundState/Idle" to="." method="_on_idle_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/CompoundState/Chasing" to="." method="_on_chasing_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/CompoundState/ReturningHome" to="." method="_on_returning_home_state_physics_processing"]
