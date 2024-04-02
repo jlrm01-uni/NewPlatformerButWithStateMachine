@@ -82,3 +82,6 @@ func _on_running_state_physics_processing(delta):
 	
 	move_and_slide()
 	
+func die():
+	print("I should be dying!")
+	

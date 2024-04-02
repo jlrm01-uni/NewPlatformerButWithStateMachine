@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://2u43mmx5atef"]
+[gd_scene load_steps=7 format=3 uid="uid://2u43mmx5atef"]
 
 [ext_resource type="Texture2D" uid="uid://dccrf0f86dqo8" path="res://kenney_pixel-platformer (2)/Tilemap/tilemap_packed.png" id="1_rsxaw"]
 [ext_resource type="PackedScene" uid="uid://hht5fur6h4o5" path="res://player.tscn" id="2_n32rw"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="3_cxv6a"]
+[ext_resource type="PackedScene" uid="uid://co5vtsehrfwfx" path="res://enemy.tscn" id="4_5j54x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yav8w"]
 texture = ExtResource("1_rsxaw")
@@ -40,4 +41,7 @@ grow_vertical = 2
 [node name="StateChartDebugger" parent="CanvasLayer/Control" instance=ExtResource("3_cxv6a")]
 layout_mode = 1
 offset_left = 739.0
-initial_node_to_watch = NodePath("../../../Player")
+initial_node_to_watch = NodePath("../../../Enemy")
+
+[node name="Enemy" parent="." instance=ExtResource("4_5j54x")]
+position = Vector2(241, 52)
